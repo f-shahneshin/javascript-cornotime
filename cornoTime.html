@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 60%;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+            margin: 50px auto;
+            padding: 50px 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 30px;
+            border-radius: 10px;
+        }
+
+        .container button {
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 20px;
+            color: #facf5a;
+            background-color: #085f63;
+            border: #085f63;
+        }
+
+        .container button:hover {
+
+            background-color: #facf5a;
+            color: #085f63;
+            border: #facf5a;
+        }
+
+        table {
+            width: 70%;
+            font-size: 20px;
+
+        }
+
+        table,
+        th,
+        td {
+            border-collapse: collapse;
+            text-align: center;
+            margin: 30px auto;
+
+        }
+
+
+        tr:nth-child(even) {
+            background: linear-gradient(-225deg, #085f63 0%, #6cb9bd 50%, #085f63 100%);
+            color: #be9218;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <span id="m">00</span>
+        <span>:</span>
+        <span id="s">00</span>
+        <span>:</span>
+        <span id="ms">000</span>
+        <br><br>
+        <button onclick="start()">start</button>
+        <button onclick="stop()">stop</button>
+        <button onclick="reset()">reset</button>
+        <button onclick="capture()">capture</button>
+        <div>
+            <table>
+                <tr style="background: linear-gradient(-225deg, #085f63 0%, #6cb9bd 50%, #085f63 100%);
+                color: #be9218;
+                ">
+                    <th style="width: 33.3%;">m</th>
+                    <th style="width: 33.3%;">s</th>
+                    <th style="width: 33.3%;">ms</th>
+                </tr>
+                <tbody id="tbody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let cornoTime = 0;
+        let cornoInterval = null;
+        let captureArray = [];
+        let m = 0,
+            s = 0,
+            ms = 0;
+
+        function start() {
+            cornoInterval = setInterval(() => {
+                cornoTime += 5;
+                // let s = Math.floor(cornoTime / 1000);
+                // let ms = cornoTime % 1000;
+                // let m = Math.floor(Math.floor(cornoTime / 1000) / 60);
+                if (cornoTime >= 1000) {
+                    s += 1;
+                    cornoTime = 0;
+                }
+                if (s >= 60) {
+                    m += 1;
+                    s = 0;
+                }
+
+                document.getElementById("ms").innerHTML = cornoTime;
+                document.getElementById("s").innerHTML = s < 10 ? `0${s}` : s;
+                document.getElementById("m").innerHTML = m < 10 ? `0${m}` : m;
+
+            }, 1);
+        }
+
+        function stop() {
+            clearInterval(cornoInterval);
+        }
+
+        function reset() {
+            clearInterval(cornoInterval);
+            m = 0;
+            s = 0,
+                ms = 0;
+            document.getElementById("ms").innerHTML = '000';
+            document.getElementById("s").innerHTML = '00';
+            document.getElementById("m").innerHTML = '00';
+            captureArray = [];
+            showTable();
+        }
+
+
+        function capture() {
+
+            let cTime = {
+                m,
+                s,
+                ms
+            }
+            captureArray.push(cTime);
+            console.log(captureArray);
+            showTable();
+        }
+
+        function showTable() {
+            let table = document.getElementById("tbody");
+            table.innerHTML = '';
+            captureArray.forEach(function (item) {
+                console.log(item);
+                table.innerHTML += `
+                <tr>
+                    <td>${item.m}</td>
+                    <td>${item.s}</td>
+                    <td>${item.ms}</td>
+                </tr>
+                `
+            })
+        }
+
+    </script>
+</body>
+
+</html>
